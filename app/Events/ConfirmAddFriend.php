@@ -11,12 +11,13 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class RemoveFriend implements ShouldBroadcast
+class ConfirmAddFriend implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-    private User $user;
 
+    private User $user;
     private User $usersender;
+
     /**
      * Create a new event instance.
      */
@@ -29,20 +30,19 @@ class RemoveFriend implements ShouldBroadcast
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return Channel[]
+     * @return array<int, \Illuminate\Broadcasting\Channel>
      */
-  public function broadcastOn(): array
+    public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('remove-friend.'.$this->user->id),
+            new PrivateChannel('confirm-add-friend.'.$this->usersender->id),
         ];
     }
 
-    public function broadcastWith(): array
+        public function broadcastWith(): array
     {
         return [
-            'id' => $this->usersender->id,
-            'username' => $this->usersender->name,
+            'user-requested'=>$this->user->name,
         ];
     }
 }

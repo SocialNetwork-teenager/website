@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Events\AddFriend;
+use App\Events\RemoveFriend;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
@@ -11,8 +12,9 @@ use Livewire\Component;
 class UserCard extends Component
 {
     public $user;
+    private \Illuminate\Contracts\Auth\Authenticatable|null|User $userauth;
 
-        public function getListeners(): array
+    public function getListeners(): array
 
     {
         $this->userauth = auth()->user();
@@ -53,7 +55,7 @@ class UserCard extends Component
     public function addFriend(): void
     {
         Auth::user()->addFriend($this->user->id);
-        event(new AddFriend($this->user , Auth::user()));
+        event(new AddFriend($this->user , $this->userauth));
     }
 
     public function showuser($id): \Illuminate\Foundation\Application|\Illuminate\Routing\Redirector|\Illuminate\Http\RedirectResponse
@@ -65,5 +67,6 @@ class UserCard extends Component
     public function removeFriend()
     {
         Auth::user()->removeFriend($this->user->id);
+        event(new RemoveFriend($this->user , $this->userauth));
     }
 }

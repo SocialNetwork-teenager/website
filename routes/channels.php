@@ -15,6 +15,27 @@ Broadcast::channel('add-friend.{friendId}', function (User $user, int $friendId)
     return false;
 });
 
+Broadcast::channel('remove-friend.{friendId}', function (User $user, int $friendId) {
+ if (auth()->check()) {
+        return $user->toArray();
+    }
+    return false;
+});
+
+Broadcast::channel('confirm-add-friend.{friendId}', function (User $user, int $friendId) {
+ if (auth()->check()) {
+        return $user->toArray();
+    }
+    return false;
+});
+
+Broadcast::channel('confirm-remove-friend.{friendId}', function (User $user, int $friendId) {
+ if (auth()->check()) {
+        return $user->toArray();
+    }
+    return false;
+});
+
 Broadcast::channel('app', function (User $user) {
     return ['id' => $user->id, 'name' => $user->name];
 });
